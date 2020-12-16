@@ -6,10 +6,25 @@
  * Converts JSON between SurveyJS and FHIR formats.
  */
 
-function remove_this_test() {
-  return "Test!"
+function to_questionnaire(survey, fhir_format) {
+  return "TODO!";
+}
+
+function from_questionnaire(questionnaire, fhir_format) {
+  return "TODO!";
+}
+
+function to_questionnaire_response(questionnaire, response, fhir_format) {
+  return "TODO!";
+}
+
+function from_questionnaire_response(questionnaire, response, fhir_format) {
+  return "TODO!";
 }
 
 module.exports = {
-  removeThisTest: remove_this_test,
+  toQuestionnaire: to_questionnaire,
+  fromQuestionnaire: from_questionnaire,
+  toQuestionnaireResponse: to_questionnaire_response,
+  fromQuestionnaireResponse: from_questionnaire_response,
 };
