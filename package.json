@@ -1,0 +1,34 @@
+{
+  "name": "surveyjs-fhir",
+  "version": "1.0.0",
+  "description": "Tools for converting between FHIR JSON and Survey.JS JSON.",
+  "main": "src/surveyjs-fhir.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "contributors": [
+    "Benjamin Li-Sauerwine"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duke-crucible/surveyjs-fhir.git"
+  },
+  "keywords": [
+    "HL7",
+    "FHIR",
+    "Survey",
+    "Survey.JS",
+    "SurveyJS",
+    "JSON",
+    "Conversion"
+  ],
+  "author": "Benjamin Li-Sauerwine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/duke-crucible/surveyjs-fhir/issues"
+  },
+  "homepage": "https://github.com/duke-crucible/surveyjs-fhir#readme",
+  "dependencies": {
+    "mocha": "^8.2.1"
+  }
+}
