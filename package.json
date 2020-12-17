@@ -29,6 +29,10 @@
   },
   "homepage": "https://github.com/duke-crucible/surveyjs-fhir#readme",
   "dependencies": {
-    "mocha": "^8.2.1"
+    "require-one-of": "^1.0.15"
+  },
+  "devDependencies": {
+    "mocha": "^8.2.1",
+    "survey-angular": "^1.8.21"
   }
 }

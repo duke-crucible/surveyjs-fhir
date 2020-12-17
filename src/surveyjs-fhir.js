@@ -6,6 +6,10 @@
  * Converts JSON between SurveyJS and FHIR formats.
  */
 
+// We need survey-library from SurveyJS, but it doesn't matter which way we get it.
+const requireOneOf = require('require-one-of');
+requireOneOf(['survey-angular', 'survey-jquery', 'survey-knockout', 'survey-react', 'survey-vue']);
+
 function to_questionnaire(survey, fhir_format) {
   return "TODO!";
 }
