@@ -10,19 +10,35 @@
 const requireOneOf = require('require-one-of');
 requireOneOf(['survey-angular', 'survey-jquery', 'survey-knockout', 'survey-react', 'survey-vue']);
 
-function to_questionnaire(survey, fhir_format) {
+function to_questionnaire(survey, fhir_version) {
+  if (fhir_version == "R4") {
+    questionnaire_json = {
+	"resourceType": "Questionnaire",
+        "status": "unknown"
+    };
+
+    if (survey.hasOwnProperty("pages")) {
+
+    } else {
+      console.warn("Survey in to_questionnaire had no pages in it.  Returning a blank FHIR questionnaire.");
+
+    }
+  } else {
+    throw new Error("FHIR version not implemented: " + fhir_version);
+  }
+
+  return questionnaire_json;  
+}
+
+function from_questionnaire(questionnaire, fhir_version) {
   return "TODO!";
 }
 
-function from_questionnaire(questionnaire, fhir_format) {
+function to_questionnaire_response(questionnaire, survey_response, fhir_version) {
   return "TODO!";
 }
 
-function to_questionnaire_response(questionnaire, response, fhir_format) {
-  return "TODO!";
-}
-
-function from_questionnaire_response(questionnaire, response, fhir_format) {
+function from_questionnaire_response(questionnaire, questionnaire_response, fhir_version) {
   return "TODO!";
 }
 
