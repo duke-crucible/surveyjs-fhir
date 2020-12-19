@@ -14,14 +14,180 @@ function to_questionnaire(survey, fhir_version) {
   if (fhir_version == "R4") {
     questionnaire_json = {
 	"resourceType": "Questionnaire",
-        "status": "unknown"
+        "status": "unknown",
+	"item": []
     };
 
     if (survey.hasOwnProperty("pages")) {
+      survey['pages'].forEach(function (page, page_index) {
+	if (page.hasOwnProperty("name")) {
+	  child_items = [];
 
+   	  if (page.hasOwnProperty("elements")) {
+            page['elements'].forEach(function (element, page_index) {
+              if (element.hasOwnProperty("name") && element.hasOwnProperty("type")) {
+                child_item = {
+		  'linkId': element['name']
+		}
+
+		if (element.hasOwnProperty("title")) {
+		  child_item['title'] = element['title'];
+		}
+
+	        if (element.hasOwnProperty("readOnly")) {
+		  child_item['readOnly'] = element['readOnly'];
+		}
+
+		if (element.hasOwnProperty("maxLength")) {
+		  child_item['maxLength'] = element['maxLength'];
+		}
+
+		if (element.hasOwnProperty("isRequired")) {
+		  child_item['required'] = element['isRequired'];
+		}
+
+		// TODO:  enableWhen
+		// TODO:  enableBehavior
+	
+                switch (element['type']) {
+                  case 'boolean':
+		    child_item['type'] = 'boolean';
+
+		    if (element.hasOwnProperty("defaultValue")) {
+		      child_item['initial'] = {
+			  'valueBoolean': element["defaultValue"]
+		      }
+	            }
+
+		    child_items.push(child_item);
+                    break;
+          	  case 'numeric':
+		    child_item['type'] = 'decimal';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueDecimal': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+		  case 'date':
+		    child_item['type'] = 'date';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueDate': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+		  case 'datetime':
+		    child_item['type'] = 'dateTime';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueDateTime': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+		  case 'time':
+		    child_item['type'] = 'time';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueTime': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+		  case 'text':
+		    child_item['type'] = 'string';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueString': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+                  case 'comment':
+		    child_item['type'] = 'text';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueString': element["defaultValue"]
+                      }
+                    }
+
+		    child_items.push(child_item);
+		    break;
+		  case 'url':
+		    child_item['type'] = 'url';
+
+                    if (element.hasOwnProperty("defaultValue")) {
+                      child_item['initial'] = {
+                          'valueUri': element["defaultValue"]
+                      }
+                    }
+
+                    child_items.push(child_item);
+		    break;
+		  case 'dropdown':
+		    if (element.hasOwnProperty('hasOther') && element['hasOther']) {
+	              child_item['type'] = 'open-choice';
+	            } else {
+		      child_item['type'] = 'choice';
+		    }
+
+		    // TODO:  answerOption
+       		    // TODO:  initialSelected
+                    // TODO:  initial.values
+
+		    child_items.push(child_item);
+		    break;
+		  case 'file':
+		    child_item['type'] = 'attachment';
+
+		    child_items.push(child_item);
+		    break;
+		  default:
+                    console.warn("Skipping unsupported survey element type: " + element['type']);
+		    break;
+		 }
+
+              } else {
+                console.warn("Survey elements found missing a name or type.  These will be skipped.");
+	      }
+            });
+          }
+
+          if (child_items.length > 0) {
+    	    item_group = {
+ 	        'linkId': page['name'],
+                'type': 'group',
+	        'item': child_items
+   	    };
+
+            if (page.hasOwnProperty("title")) {
+	      item_group['text'] = pages['title'];
+   	    }
+
+            questionnaire_json['item'].push(item_group);
+	  } else {
+            console.warn("A page was found with no elements, so it could not be included in our FHIR questionnaire.");
+	  }
+	} else {
+          console.warn("Survey page had no name, so it could not be included in our FHIR questionnaire.");
+	}
+      });
     } else {
       console.warn("Survey in to_questionnaire had no pages in it.  Returning a blank FHIR questionnaire.");
-
     }
   } else {
     throw new Error("FHIR version not implemented: " + fhir_version);

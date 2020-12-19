@@ -91,6 +91,9 @@ describe('toQuestionnaireTODO', function() {
     assert.strictEqual(
          true,
          validation_result['valid']);
+
+    // Check that some things in the survey FHIR translated over.
+
     done();
   });
 });
