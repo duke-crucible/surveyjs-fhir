@@ -145,9 +145,33 @@ function to_questionnaire(survey, fhir_version) {
 		      child_item['type'] = 'choice';
 		    }
 
-		    // TODO:  answerOption
-       		    // TODO:  initialSelected
-                    // TODO:  initial.values
+                    answer_options = [];
+
+		    if (element.hasOwnProperty('choices')) {
+                      element['choices'].forEach(function (option, page_index) {
+		        answer_option = {
+			    'valueCoding': {}
+			};
+
+			if (option.hasOwnProperty('value')) {
+			  answer_option['valueCoding']['code'] = option['value'];
+
+			  if (element.hasOwnProperty("defaultValue")) {
+			    if (option['value'] == element['defaultValue']) {
+                              answer_option['initiaSelected'] = true;
+		            }
+		          }
+		        }
+
+ 	   	        if (option.hasOwnProperty('text')) {
+   		          answer_option['valueCoding']['display'] = option['text'];
+		  	}
+
+			answer_options.push(answer_option);
+		      });
+		    }
+
+	            child_item['answerOption'] = answer_options;
 
 		    child_items.push(child_item);
 		    break;

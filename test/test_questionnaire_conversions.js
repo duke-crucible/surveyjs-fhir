@@ -92,7 +92,7 @@ describe('toQuestionnaireTODO', function() {
          true,
          validation_result['valid']);
 
-    // Check that some things in the survey FHIR translated over.
+    // TODO: Check that some things in the survey FHIR translated over.
 
     done();
   });
