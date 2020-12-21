@@ -208,7 +208,7 @@ function to_questionnaire(survey, fhir_version) {
    	    };
 
             if (page.hasOwnProperty("title")) {
-	      item_group['text'] = pages['title'];
+	      item_group['text'] = page['title'];
    	    }
 
             questionnaire_json['item'].push(item_group);

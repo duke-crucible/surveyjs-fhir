@@ -28,49 +28,121 @@ describe('toQuestionnaireTODO', function() {
     var survey_json = {
         "pages": [
             {
-                "name": "page1",
+                "name": "single-inputs-page",
                 "elements": [
                     {
                         "type": "text",
-                        "name": "question1",
-                        "title": "Enter a Thing"
+                        "name": "single-input-text",
+                        "title": "Single Input Text",
+                        "defaultValue": "default"
                     },
                     {
+                        "type": "text",
+                        "name": "single-input-date",
+                        "title": "Single Input Date",
+                        "defaultValue": "1982-11-22",
+                        "inputType": "date"
+                    },
+                    {
+                        "type": "text",
+                        "name": "single-input-datetime",
+                        "title": "Single Input Datetime",
+                        "defaultValue": "11/22/1982 12:00:00",
+                        "inputType": "datetime"
+                    },
+                    {
+                        "type": "text",
+                        "name": "single-input-time",
+                        "title": "Single Input  Time",
+                        "defaultValue": "11:22",
+                        "inputType": "time"
+                    },
+                    {
+                        "type": "text",
+                        "name": "single-input-number",
+                        "title": "Single Input Number",
+                        "defaultValue": 11.22,
+                        "inputType": "number"
+                    },
+                    {
+                        "type": "text",
+                        "name": "single-input-url",
+                        "title": "Single Input URL",
+                        "defaultValue": "http://www.github.com"
+                    }
+                ],
+                "title": "Single Inputs Page"
+            },
+            { 
+                "name": "special-inputs-page",
+                "elements": [
+                    {
+                        "type": "comment",
+                        "name": "comment",
+                        "title": "Read Only Comment",
+                        "defaultValue": "Lorem Ipsum Et Cetera",
+                        "readOnly": true
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "Required Boolean",
+                        "defaultValue": "true",
+                        "isRequired": true
+                    },
+                    {
+                        "type": "file",
+                        "name": "file-uploader",
+                        "title": "File Attachment",
+                        "maxSize": 0
+                    }
+                ],
+                "title": "Special Inputs Page"
+            },
+            {
+                "name": "dropdowns-page",
+                "elements": [
+                    {
                         "type": "dropdown",
-                        "name": "question2",
-                        "title": "More Things!",
+                        "name": "dropdown-no-other",
+                        "title": "Dropdown No Other",
+                        "defaultValue": "item3",
                         "choices": [
                             {
                                 "value": "item1",
-                                "text": "A"
+                                "text": "1"
                             },
                             {
                                 "value": "item2",
-                                "text": "B"
+                                "text": "2"
                             },
                             {
                                 "value": "item3",
-                                "text": "C"
-                            },
-                            {
-                                "value": "item4",
-                                "text": "D"
+                                "text": "3"
                             }
                         ]
                     },
                     {
-                        "type": "checkbox",
-                        "name": "question3",
-                        "visibleIf": "{question2} = 'item1'",
-                        "title": "Only if 2 is A.",
+                        "type": "dropdown",
+                        "name": "dropdown-with-other",
+                        "title": "Dropdown With Other",
                         "choices": [
                             {
                                 "value": "item1",
-                                "text": "Yes"
+                                "text": "1"
+                            },
+                            {
+                                "value": "item2",
+                                "text": "2"
+                            },
+                            {
+                                "value": "item3",
+                                "text": "3"
                             }
-                        ]
+                        ],
+                        "hasOther": true
                     }
-                ]
+                ],
+                "title": "Dropdowns Page"
             }
         ]
     };
