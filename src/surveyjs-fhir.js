@@ -18,11 +18,19 @@ function to_questionnaire(survey, fhir_version) {
 	"item": []
     };
 
+    // TODO:  visibleIf <-> FHIR.enableWhen and FHIR.enableBehavior need to be done in a separate pass.
+    //        This is because we won't know all of the type mappings for the elements, which will require a first pass.
+    //        We will need to maintain a dict of the mappings between element names and types.
+    //        Further, we can only support simple clauses like (question operand value) and all must be
+    //        linked by only one of "and" and "or" because of limitations of FHIR.
+    //        The right way to parse this is likely going to be through SurveyJS's own conditionsParser:
+    //        https://github.com/surveyjs/survey-library/blob/master/src/conditionsParser.ts
+
     if (survey.hasOwnProperty("pages")) {
       survey['pages'].forEach(function (page, page_index) {
 	if (page.hasOwnProperty("name")) {
 	  child_items = [];
-
+	
    	  if (page.hasOwnProperty("elements")) {
             page['elements'].forEach(function (element, page_index) {
               if (element.hasOwnProperty("name") && element.hasOwnProperty("type")) {
@@ -46,9 +54,10 @@ function to_questionnaire(survey, fhir_version) {
 		  child_item['required'] = element['isRequired'];
 		}
 
-		// TODO:  enableWhen
-		// TODO:  enableBehavior
-	
+		if (element.hasOwnProperty("visibleIf")) {
+                  console.warn("visibleIf is not yet supported: " + element['name']);
+		}
+
                 switch (element['type']) {
                   case 'boolean':
 		    child_item['type'] = 'boolean';
