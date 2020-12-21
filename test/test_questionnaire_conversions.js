@@ -53,7 +53,7 @@ describe('toQuestionnaireTODO', function() {
                     {
                         "type": "text",
                         "name": "single-input-time",
-                        "title": "Single Input  Time",
+                        "title": "Single Input Time",
                         "defaultValue": "11:22",
                         "inputType": "time"
                     },
@@ -164,7 +164,11 @@ describe('toQuestionnaireTODO', function() {
          true,
          validation_result['valid']);
 
-    // TODO: Check that some things in the survey FHIR translated over.
+    // Check that some things in the survey FHIR translated over.
+    // We avoid making a change-detector test by just spot checking a few things.
+    var result_string = JSON.stringify(fhir_questionnaire);
+
+    assert.ok(result_string.includes("Single Inputs Page"), result_string);
 
     done();
   });
