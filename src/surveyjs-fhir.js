@@ -59,72 +59,102 @@ function to_questionnaire(survey, fhir_version) {
 		}
 
                 switch (element['type']) {
-                  case 'boolean':
-		    child_item['type'] = 'boolean';
+                  case 'text':
+		    if (element.hasOwnProperty("inputType")) {
+		      switch (element['inputType']) {
+          	        case 'numeric':
+     		          child_item['type'] = 'decimal';
 
-		    if (element.hasOwnProperty("defaultValue")) {
-		      child_item['initial'] = {
-			  'valueBoolean': element["defaultValue"]
+                          if (element.hasOwnProperty("defaultValue")) {
+                            child_item['initial'] = {
+                                'valueDecimal': element["defaultValue"]
+                            }
+                          }
+
+     	 	          child_items.push(child_item);
+		          break;
+           		case 'date':
+         		  child_item['type'] = 'date';
+
+                          if (element.hasOwnProperty("defaultValue")) {
+                            child_item['initial'] = {
+                                'valueDate': element["defaultValue"]
+                            }
+                          }
+
+	       	          child_items.push(child_item);
+         		  break;
+          		case 'datetime':
+  	  	          child_item['type'] = 'dateTime';
+
+                          if (element.hasOwnProperty("defaultValue")) {
+                            child_item['initial'] = {
+                                'valueDateTime': element["defaultValue"]
+                            }
+                          }
+    
+ 	   	         child_items.push(child_item);
+		         break;
+	  	       case 'time':
+  	  	         child_item['type'] = 'time';
+
+                         if (element.hasOwnProperty("defaultValue")) {
+                           child_item['initial'] = {
+                               'valueTime': element["defaultValue"]
+                           }
+                         }
+
+		         child_items.push(child_item);
+ 	        	 break;
+		       case 'url':
+ 	  	         child_item['type'] = 'url';
+
+                         if (element.hasOwnProperty("defaultValue")) {
+                           child_item['initial'] = {
+                              'valueUri': element["defaultValue"]
+                           }
+                         }
+
+                         child_items.push(child_item);
+	        	 break;
+ 		       default:
+                         console.warn("Skipping unsupported string input type: " + element['inputType']);
+		         break;
 		      }
-	            }
+	  	    } else {
+		      child_item['type'] = 'string';
 
-		    child_items.push(child_item);
-                    break;
-          	  case 'numeric':
-		    child_item['type'] = 'decimal';
+                      if (element.hasOwnProperty("defaultValue")) {
+                        child_item['initial'] = {
+                            'valueString': element["defaultValue"]
+                        }
+                      }
+                    
+		      child_items.push(child_item);
+		    }
+		    break;
+		  case 'url':
+		    child_item['type'] = 'url';
 
                     if (element.hasOwnProperty("defaultValue")) {
                       child_item['initial'] = {
-                          'valueDecimal': element["defaultValue"]
+                          'valueUri': element["defaultValue"]
                       }
                     }
 
-		    child_items.push(child_item);
+                    child_items.push(child_item);
 		    break;
-		  case 'date':
-		    child_item['type'] = 'date';
+                  case 'boolean':
+                    child_item['type'] = 'boolean';
 
                     if (element.hasOwnProperty("defaultValue")) {
                       child_item['initial'] = {
-                          'valueDate': element["defaultValue"]
+                          'valueBoolean': element["defaultValue"]
                       }
                     }
 
-		    child_items.push(child_item);
-		    break;
-		  case 'datetime':
-		    child_item['type'] = 'dateTime';
-
-                    if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
-                          'valueDateTime': element["defaultValue"]
-                      }
-                    }
-
-		    child_items.push(child_item);
-		    break;
-		  case 'time':
-		    child_item['type'] = 'time';
-
-                    if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
-                          'valueTime': element["defaultValue"]
-                      }
-                    }
-
-		    child_items.push(child_item);
-		    break;
-		  case 'text':
-		    child_item['type'] = 'string';
-
-                    if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
-                          'valueString': element["defaultValue"]
-                      }
-                    }
-
-		    child_items.push(child_item);
-		    break;
+                    child_items.push(child_item);
+                    break;	
                   case 'comment':
 		    child_item['type'] = 'text';
 

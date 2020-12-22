@@ -68,7 +68,8 @@ describe('toQuestionnaireTODO', function() {
                         "type": "text",
                         "name": "single-input-url",
                         "title": "Single Input URL",
-                        "defaultValue": "http://www.github.com"
+                        "defaultValue": "http://www.github.com",
+			"inputType": "url"
                     }
                 ],
                 "title": "Single Inputs Page"
@@ -169,6 +170,13 @@ describe('toQuestionnaireTODO', function() {
     var result_string = JSON.stringify(fhir_questionnaire);
 
     assert.ok(result_string.includes("Single Inputs Page"), result_string);
+    assert.ok(result_string.includes("valueUri"), result_string);
+    assert.ok(result_string.includes("Special Inputs Page"), result_string);
+    assert.ok(result_string.includes("Lorem Ipsum Et Cetera"), result_string);
+    assert.ok(result_string.includes("Dropdowns Page"), result_string);
+    assert.ok(result_string.includes("item1"), result_string);
+
+    // Now let's convert it back and see if the conversion was idempotent.
 
     done();
   });
