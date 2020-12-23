@@ -3,27 +3,9 @@ var converters = require('./../src/surveyjs-fhir.js');
 var Fhir = require('fhir').Fhir;
 var SurveyJS = require('survey-angular');
 
-// First, we should test toQuestionnaire.
-// The general test plan can be to take some valid SurveyJS questionnaires,
-// Parse them into current SurveyJS (in case the format changes, we need to 
-// be aware that the gold-standard test surveys are actually valid),
-// re-serialize them, and output valid FHIR JSON.  It would be a change-detector
-// test if we ended up validating against a fixed result, but we can check a few
-// fields.  Finally, we can have an end-to-end idempotence test where we convert
-// SurveyJS toQuestionnaire, fromQuestionnaire, and toQuestionnaire, and make sure
-// that the result after the first and third operations are the same.
 
-describe('fromQuestionnaireTODO', function() {
-  it('should return TODO', function(done) {
-    assert.strictEqual(
-	'TODO!',
-	 converters.fromQuestionnaire('TODO', 'TODO'));
-    done();
-  });
-});
-
-describe('toQuestionnaireTODO', function() {
-  it('should return TODO', function(done) {
+describe('toFromQuestionnaireIdempotence', function() {
+  it('Should idempotently convert compatible SurveyJS to Questionnaire and back.', function(done) {
     // First, we load a SurveyJS questionnaire JSON.
     var survey_json = {
         "pages": [
@@ -177,6 +159,10 @@ describe('toQuestionnaireTODO', function() {
     assert.ok(result_string.includes("item1"), result_string);
 
     // Now let's convert it back and see if the conversion was idempotent.
+    var survey_from_fhir = converters.fromQuestionnaire(fhir_questionnaire, 'R4');
+    assert.deepStrictEqual(
+	survey_json,
+	survey_from_fhir)
 
     done();
   });

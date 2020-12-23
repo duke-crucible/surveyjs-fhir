@@ -12,7 +12,7 @@ requireOneOf(['survey-angular', 'survey-jquery', 'survey-knockout', 'survey-reac
 
 function to_questionnaire(survey, fhir_version) {
   if (fhir_version == "R4") {
-    questionnaire_json = {
+    var questionnaire_json = {
 	"resourceType": "Questionnaire",
         "status": "unknown",
 	"item": []
@@ -29,17 +29,17 @@ function to_questionnaire(survey, fhir_version) {
     if (survey.hasOwnProperty("pages")) {
       survey['pages'].forEach(function (page, page_index) {
 	if (page.hasOwnProperty("name")) {
-	  child_items = [];
+	  var child_items = [];
 	
    	  if (page.hasOwnProperty("elements")) {
             page['elements'].forEach(function (element, page_index) {
               if (element.hasOwnProperty("name") && element.hasOwnProperty("type")) {
-                child_item = {
+                var child_item = {
 		  'linkId': element['name']
 		}
 
 		if (element.hasOwnProperty("title")) {
-		  child_item['title'] = element['title'];
+		  child_item['text'] = element['title'];
 		}
 
 	        if (element.hasOwnProperty("readOnly")) {
@@ -62,7 +62,7 @@ function to_questionnaire(survey, fhir_version) {
                   case 'text':
 		    if (element.hasOwnProperty("inputType")) {
 		      switch (element['inputType']) {
-          	        case 'numeric':
+          	        case 'number':
      		          child_item['type'] = 'decimal';
 
                           if (element.hasOwnProperty("defaultValue")) {
@@ -133,17 +133,6 @@ function to_questionnaire(survey, fhir_version) {
 		      child_items.push(child_item);
 		    }
 		    break;
-		  case 'url':
-		    child_item['type'] = 'url';
-
-                    if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
-                          'valueUri': element["defaultValue"]
-                      }
-                    }
-
-                    child_items.push(child_item);
-		    break;
                   case 'boolean':
                     child_item['type'] = 'boolean';
 
@@ -184,11 +173,11 @@ function to_questionnaire(survey, fhir_version) {
 		      child_item['type'] = 'choice';
 		    }
 
-                    answer_options = [];
+                    var answer_options = [];
 
 		    if (element.hasOwnProperty('choices')) {
                       element['choices'].forEach(function (option, page_index) {
-		        answer_option = {
+		        var answer_option = {
 			    'valueCoding': {}
 			};
 
@@ -197,7 +186,7 @@ function to_questionnaire(survey, fhir_version) {
 
 			  if (element.hasOwnProperty("defaultValue")) {
 			    if (option['value'] == element['defaultValue']) {
-                              answer_option['initiaSelected'] = true;
+                              answer_option['initialSelected'] = true;
 		            }
 		          }
 		        }
@@ -231,7 +220,7 @@ function to_questionnaire(survey, fhir_version) {
           }
 
           if (child_items.length > 0) {
-    	    item_group = {
+    	    var item_group = {
  	        'linkId': page['name'],
                 'type': 'group',
 	        'item': child_items
@@ -259,8 +248,254 @@ function to_questionnaire(survey, fhir_version) {
   return questionnaire_json;  
 }
 
+
+function unpack_items_recursive(questionnaire, fhir_version, default_title=null) {
+  if (fhir_version == "R4") {
+    var pages = [];
+
+    if (questionnaire.hasOwnProperty('item')) {
+      var page = {};
+
+      // Get basic data for this page.
+      var title = default_title;
+
+      // Root questionnaire
+      if (questionnaire.hasOwnProperty('title')) {
+	title = questionnaire['title'];
+      }
+
+      // Child item-groups
+      if (questionnaire.hasOwnProperty('text')) {
+        title = questionnaire['text'];
+      }
+
+      if (title) {
+	page['title'] = title;
+      }
+
+      if (questionnaire.hasOwnProperty('name')) {
+	page['name'] = questionnaire['name'];
+      }
+
+      if (questionnaire.hasOwnProperty('linkId')) {
+        page['name'] = questionnaire['linkId'];
+      }
+
+      var elements = [];
+      questionnaire['item'].forEach(function (item, item_index) {
+	if (item.hasOwnProperty('item')) {
+          // This is a group.  Unpack it using our current defaults.
+          pages = pages.concat(unpack_items_recursive(item, fhir_version, title));
+	} else {
+          // This is an element.
+          var element = {};
+
+          // Get basic, universal information for this item.
+	  // Root questionnaire
+          if (item.hasOwnProperty('name')) {
+            element['name'] = item['name'];
+          }	
+
+	  // Child item-groups
+          if (item.hasOwnProperty('linkId')) {
+            element['name'] = item['linkId'];
+	  }
+
+          // Root questionnarie
+	  if (item.hasOwnProperty('title')) {
+            element['title'] = item['title'];
+	  }
+
+          // Child item-groups
+          if (item.hasOwnProperty('text')) {
+            element['title'] = item['text'];
+          }
+
+	  if (item.hasOwnProperty('required')) {
+	    element['isRequired'] = item['required'];
+	  }
+
+	  if (item.hasOwnProperty('maxLength')) {
+	    element['maxLength'] = item['maxLength'];
+	  }
+	  
+          if (item.hasOwnProperty('readOnly')) {
+            element['readOnly'] = item['readOnly'];
+          }
+
+	  // TODO:  Support FHIR enableWhen/enableBehavior.
+	  // Going from FHIR to SurveyJS in this case should be much easier than from SurveyJS to FHIR.
+
+	  switch (item['type']) {
+	    case 'decimal':
+	      if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDecimal')) {
+		element['defaultValue'] = item['initial']['valueDecimal'];
+	      }
+
+	      element['type'] = 'text';
+	      element['inputType'] = 'number';
+	      elements.push(element);
+	      break;
+            case 'date':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDate')) {
+                element['defaultValue'] = item['initial']['valueDate'];
+              }
+
+              element['type'] = 'text';
+              element['inputType'] = 'date';
+              elements.push(element);
+              break;
+            case 'dateTime':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDateTime')) {
+                element['defaultValue'] = item['initial']['valueDateTime'];
+	      }
+
+              element['type'] = 'text';
+              element['inputType'] = 'datetime';
+              elements.push(element);
+              break;
+            case 'time':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueTime')) {
+                element['defaultValue'] = item['initial']['valueTime'];
+	      }
+
+              element['type'] = 'text';
+              element['inputType'] = 'time';
+              elements.push(element);
+              break;
+	    case 'url':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueUri')) {
+                element['defaultValue'] = item['initial']['valueUri'];
+              }
+
+              element['type'] = 'text';
+              element['inputType'] = 'url';
+              elements.push(element);
+	      break;
+	    case 'string':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueString')) {
+                element['defaultValue'] = item['initial']['valueString'];
+              }
+
+              element['type'] = 'text';
+              elements.push(element);
+	      break;
+            case 'boolean':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueBoolean')) {
+                element['defaultValue'] = item['initial']['valueBoolean'];
+              }
+
+              element['type'] = 'boolean';
+              elements.push(element);
+	      break;
+            case 'text':
+              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueString')) {
+                element['defaultValue'] = item['initial']['valueString'];
+              }
+
+	      element['type'] = 'comment';
+              elements.push(element);
+              break;
+	    case 'attachment':
+	      element['type'] = 'file';
+	      element['maxSize'] = 0;  // Required, but no clear place to store this in FHIR.
+	      elements.push(element);
+	      break;
+	    case 'open-choice':
+              element['hasOther'] = true;
+	    case 'choice':
+	      element['type'] = 'dropdown';
+	      var defaultValue = null;
+	      var choices = [];
+
+	      if (item.hasOwnProperty('answerOption')) {
+                item['answerOption'].forEach(function (option, option_index) {
+	          var choice = {};
+
+		  if (option.hasOwnProperty('valueInteger')) {
+		    choice['value'] = String(option['valueInteger']);
+		    choice['text'] = String(option['valueInteger']);
+		  }
+
+                  if (option.hasOwnProperty('valueDate')) {
+                    choice['value'] = String(option['valueDate']);
+                    choice['text'] = String(option['valueDate']);
+                  }
+
+                  if (option.hasOwnProperty('valueTime')) {
+                    choice['value'] = String(option['valueTime']);
+                    choice['text'] = String(option['valueTime']);
+                  }
+
+                  if (option.hasOwnProperty('valueString')) {
+                    choice['value'] = String(option['valueString']);
+                    choice['text'] = String(option['valueString']);
+                  }
+
+		  if (option.hasOwnProperty('valueCoding')) {
+		    if (option['valueCoding'].hasOwnProperty('code')) {
+		      choice['value'] = option['valueCoding']['code'];
+		      choice['text'] = option['valueCoding']['code'];
+		    }
+
+		    if (option['valueCoding'].hasOwnProperty('display')) {
+                      choice['text'] = option['valueCoding']['display'];
+
+		      if (!(choice.hasOwnProperty('value'))) {
+                        choice['value'] = option['valueCoding']['display'];
+		      }
+		    }
+		  }
+
+	          if (choice.hasOwnProperty('value')) {
+  	            if (option.hasOwnProperty('initialSelected')){
+	              if (option['initialSelected']) {
+                        defaultValue = choice['value'];
+	  	      }
+ 	            }
+		    choices.push(choice);
+		  } else {
+                    console.warn("Questionnaire dropdowns had invalid options.");
+	          }
+		});
+
+		element['choices'] = choices;
+	      }
+
+	      if (defaultValue) {
+		element['defaultValue'] = defaultValue;
+	      }
+              elements.push(element);
+              break;
+            default:
+              console.warn("Skipping unsupported questionnaire item type: " + item['type']);
+              break;
+	  }
+	}
+      });
+
+      // Decline to add empty pages.
+      if (elements.length > 0) {
+        page['elements'] = elements;
+        pages.push(page);
+      }
+    }
+
+    return pages;
+  } else {
+    throw new Error("FHIR version not implemented: " + fhir_version);
+  }
+}
+
+
 function from_questionnaire(questionnaire, fhir_version) {
-  return "TODO!";
+  pages = [];
+
+  pages = unpack_items_recursive(questionnaire, fhir_version);
+
+  return {
+      'pages': pages
+  };
 }
 
 function to_questionnaire_response(questionnaire, survey_response, fhir_version) {
