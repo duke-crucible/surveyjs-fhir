@@ -66,9 +66,9 @@ function to_questionnaire(survey, fhir_version) {
      		          child_item['type'] = 'decimal';
 
                           if (element.hasOwnProperty("defaultValue")) {
-                            child_item['initial'] = {
+                            child_item['initial'] = [{
                                 'valueDecimal': element["defaultValue"]
-                            }
+                            }]
                           }
 
      	 	          child_items.push(child_item);
@@ -77,9 +77,9 @@ function to_questionnaire(survey, fhir_version) {
          		  child_item['type'] = 'date';
 
                           if (element.hasOwnProperty("defaultValue")) {
-                            child_item['initial'] = {
+                            child_item['initial'] = [{
                                 'valueDate': element["defaultValue"]
-                            }
+                            }]
                           }
 
 	       	          child_items.push(child_item);
@@ -88,9 +88,9 @@ function to_questionnaire(survey, fhir_version) {
   	  	          child_item['type'] = 'dateTime';
 
                           if (element.hasOwnProperty("defaultValue")) {
-                            child_item['initial'] = {
+                            child_item['initial'] = [{
                                 'valueDateTime': element["defaultValue"]
-                            }
+                            }]
                           }
     
  	   	         child_items.push(child_item);
@@ -99,9 +99,9 @@ function to_questionnaire(survey, fhir_version) {
   	  	         child_item['type'] = 'time';
 
                          if (element.hasOwnProperty("defaultValue")) {
-                           child_item['initial'] = {
+                           child_item['initial'] = [{
                                'valueTime': element["defaultValue"]
-                           }
+                           }]
                          }
 
 		         child_items.push(child_item);
@@ -110,9 +110,9 @@ function to_questionnaire(survey, fhir_version) {
  	  	         child_item['type'] = 'url';
 
                          if (element.hasOwnProperty("defaultValue")) {
-                           child_item['initial'] = {
+                           child_item['initial'] = [{
                               'valueUri': element["defaultValue"]
-                           }
+                           }]
                          }
 
                          child_items.push(child_item);
@@ -125,9 +125,9 @@ function to_questionnaire(survey, fhir_version) {
 		      child_item['type'] = 'string';
 
                       if (element.hasOwnProperty("defaultValue")) {
-                        child_item['initial'] = {
+                        child_item['initial'] = [{
                             'valueString': element["defaultValue"]
-                        }
+                        }]
                       }
                     
 		      child_items.push(child_item);
@@ -137,9 +137,9 @@ function to_questionnaire(survey, fhir_version) {
                     child_item['type'] = 'boolean';
 
                     if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
+                      child_item['initial'] = [{
                           'valueBoolean': element["defaultValue"]
-                      }
+                      }]
                     }
 
                     child_items.push(child_item);
@@ -148,9 +148,9 @@ function to_questionnaire(survey, fhir_version) {
 		    child_item['type'] = 'text';
 
                     if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
+                      child_item['initial'] = [{
                           'valueString': element["defaultValue"]
-                      }
+                      }]
                     }
 
 		    child_items.push(child_item);
@@ -159,9 +159,9 @@ function to_questionnaire(survey, fhir_version) {
 		    child_item['type'] = 'url';
 
                     if (element.hasOwnProperty("defaultValue")) {
-                      child_item['initial'] = {
+                      child_item['initial'] = [{
                           'valueUri': element["defaultValue"]
-                      }
+                      }]
                     }
 
                     child_items.push(child_item);
@@ -248,7 +248,6 @@ function to_questionnaire(survey, fhir_version) {
   return questionnaire_json;  
 }
 
-
 function unpack_items_recursive(questionnaire, fhir_version, default_title=null) {
   if (fhir_version == "R4") {
     var pages = [];
@@ -328,8 +327,8 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
 
 	  switch (item['type']) {
 	    case 'decimal':
-	      if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDecimal')) {
-		element['defaultValue'] = item['initial']['valueDecimal'];
+	      if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueDecimal')) {
+		element['defaultValue'] = item['initial'][0]['valueDecimal'];
 	      }
 
 	      element['type'] = 'text';
@@ -337,8 +336,8 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
 	      elements.push(element);
 	      break;
             case 'date':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDate')) {
-                element['defaultValue'] = item['initial']['valueDate'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueDate')) {
+                element['defaultValue'] = item['initial'][0]['valueDate'];
               }
 
               element['type'] = 'text';
@@ -346,8 +345,8 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
               elements.push(element);
               break;
             case 'dateTime':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueDateTime')) {
-                element['defaultValue'] = item['initial']['valueDateTime'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueDateTime')) {
+                element['defaultValue'] = item['initial'][0]['valueDateTime'];
 	      }
 
               element['type'] = 'text';
@@ -355,8 +354,8 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
               elements.push(element);
               break;
             case 'time':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueTime')) {
-                element['defaultValue'] = item['initial']['valueTime'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueTime')) {
+                element['defaultValue'] = item['initial'][0]['valueTime'];
 	      }
 
               element['type'] = 'text';
@@ -364,8 +363,8 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
               elements.push(element);
               break;
 	    case 'url':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueUri')) {
-                element['defaultValue'] = item['initial']['valueUri'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueUri')) {
+                element['defaultValue'] = item['initial'][0]['valueUri'];
               }
 
               element['type'] = 'text';
@@ -373,24 +372,24 @@ function unpack_items_recursive(questionnaire, fhir_version, default_title=null)
               elements.push(element);
 	      break;
 	    case 'string':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueString')) {
-                element['defaultValue'] = item['initial']['valueString'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueString')) {
+                element['defaultValue'] = item['initial'][0]['valueString'];
               }
 
               element['type'] = 'text';
               elements.push(element);
 	      break;
             case 'boolean':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueBoolean')) {
-                element['defaultValue'] = item['initial']['valueBoolean'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueBoolean')) {
+                element['defaultValue'] = item['initial'][0]['valueBoolean'];
               }
 
               element['type'] = 'boolean';
               elements.push(element);
 	      break;
             case 'text':
-              if (item.hasOwnProperty('initial') && item['initial'].hasOwnProperty('valueString')) {
-                element['defaultValue'] = item['initial']['valueString'];
+              if (item.hasOwnProperty('initial') && item['initial'].length == 1 && item['initial'][0].hasOwnProperty('valueString')) {
+                element['defaultValue'] = item['initial'][0]['valueString'];
               }
 
 	      element['type'] = 'comment';
@@ -498,11 +497,129 @@ function from_questionnaire(questionnaire, fhir_version) {
   };
 }
 
-function to_questionnaire_response(questionnaire, survey_response, fhir_version) {
-  return "TODO!";
+function pack_survey_response(questionnaire, survey_response, fhir_version) {
+  if (fhir_version == "R4") {
+    // We will traverse the questionnaire's items, matching them to a survey response as possible.
+    var items = [];
+
+    // The response item's structure largely mimics that of the questionnaire itself.
+    // Thus, we will copy it and add the answers whenever applicable.
+    if (questionnaire.hasOwnProperty('item')) {
+      questionnaire['item'].forEach(function (item, item_index) {
+        var current_item = {};
+
+	if (item.hasOwnProperty('linkId')) {
+          current_item['linkId'] = item['linkId'];
+
+          // Check the survey response for this linkId.
+          if (survey_response.hasOwnProperty(item['linkId']) && item.hasOwnProperty['type']) {
+ 	    switch (item['type']) {
+ 	      case 'decimal':
+		current_item['answer'] = [{'valueDecimal': survey_response[item['linkId']]}];
+	        break;
+              case 'date':
+		current_item['answer'] = [{'valueDate': survey_response[item['linkId']]}];
+                break;
+              case 'dateTime':
+		current_item['answer'] = [{'valueDateTime': survey_response[item['linkId']]}];
+                break;
+              case 'time':
+		current_item['answer'] = [{'valueTime': survey_response[item['linkId']]}];
+                break;
+	      case 'url':
+		current_item['answer'] = [{'valueUri': survey_response[item['linkId']]}];
+	        break;
+  	      case 'string':
+		current_item['answer'] = [{'valueString': survey_response[item['linkId']]}];
+	        break;
+              case 'boolean':
+		current_item['answer'] = [{'valueBoolean': survey_response[item['linkId']]}];
+	        break;
+              case 'text':
+ 		current_item['answer'] = [{'valueString': survey_response[item['linkId']]}];
+	        break;
+	      case 'attachment':
+	        current_item['answer'] = [];
+
+		survey_response[item['linkId']].forEach(function (survey_attachment, survey_attachment_index) {
+                  var attachment = {};
+
+		  if (survey_attachment.hasOwnProperty('type')) {
+                    attachment['contentType'] = survey_attachment['type'];
+		  }
+
+	          if (survey_attachment.hasOwnProperty('name')) {
+		    attachment['title'] = survey_attachment['name'];
+		  }
+
+		  if (survey_attachment.hasOwnProperty('content')) {
+		    // SurveyJS includes a prefix.
+		    // We should take everything after the comma.
+                    attachment['data'] = survey_attachment['content'].substring(comma_position + 1);
+		  }
+
+	          current_item['answer'].push({'valueAttachment': attachment});
+		});
+	        break;
+  	      case 'choice':
+        	current_item['answer'] = [{'valueString': survey_response[item['linkId']]}];
+	        break;
+  	      case 'open-choice':  
+        	current_item['answer'] = [{'valueString': survey_response[item['linkId']]}];
+
+	        if (survey_response.hasOwnProperty(item['linkId'] + "-Comment")) {
+		  current_item['answer'].push({'valueString': survey_response[item['linkId'] + "-Comment"]});
+	        }
+	        break;
+              default:
+                console.warn("Skipping unsupported questionnaire item type: " + item['type']);
+                break;
+	    }
+	  }
+	}
+
+        if (item.hasOwnProperty('definition')) {
+          current_item['definition'] = item['definition'];
+	}
+
+        if (item.hasOwnProperty('text')) {
+          current_item['text'] = item['text'];
+        }
+
+	if (item.hasOwnProperty('item')) {
+          current_item['item'] = pack_survey_response(item['item'], survey_response, fhir_version);
+	}
+
+	items.push(current_item);
+      });
+    }
+
+    return items;
+  } else {
+    throw new Error("FHIR version not implemented: " + fhir_version);
+  }
 }
 
-function from_questionnaire_response(questionnaire, questionnaire_response, fhir_version) {
+function to_questionnaire_response(questionnaire, survey_response, fhir_version) {
+  if (fhir_version == "R4") {
+    // We will traverse the questionnaire's items, matching them to a survey response as possible.
+    var questionnaire_response_json = {
+        "resourceType": "QuestionnaireResponse",
+        "status": "completed",
+    };
+
+    // The response item's structure largely mimics that of the questionnaire itself.
+    // Thus, we will copy it and add the answers whenever applicable.
+
+    questionnaire_response_json['item'] = pack_survey_response(questionnaire, survey_response, fhir_version);
+
+    return questionnaire_response_json;
+  } else {
+    throw new Error("FHIR version not implemented: " + fhir_version);
+  }
+}
+
+function from_questionnaire_response(questionnaire_response, fhir_version) {
   return "TODO!";
 }
 
