@@ -138,8 +138,8 @@ const sample_surveyjs_1_response = {
         }
     ],
     "dropdown-no-other": "item1",
-    "question1": "other",
-    "question1-Comment": "Other Selected!"
+    "dropdown-with-other": "other",
+    "dropdown-with-other-Comment": "Other Selected!"
 };
 
 module.exports = {

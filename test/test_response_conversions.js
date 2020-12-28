@@ -31,8 +31,11 @@ describe('toFromQuestionnaireResponseIdempotence', function() {
 	test_data.sample_surveyjs_1_response,
 	'R4');
 
-    // TODO: Spot check that a few things came through in the survey response.
+    // Spot check that a few things came through in the survey response.
+    var result_string = JSON.stringify(questionnaire_response);
 
+    assert.ok(result_string.includes("Single Inputs Page"), result_string);
+    assert.ok(result_string.includes("Other Selected!"), result_string);
 
     // TODO:  Convert it back to SurveyJS and make sure it's the same.
     done();

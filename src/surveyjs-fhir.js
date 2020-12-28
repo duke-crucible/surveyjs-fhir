@@ -512,7 +512,7 @@ function pack_survey_response(questionnaire, survey_response, fhir_version) {
           current_item['linkId'] = item['linkId'];
 
           // Check the survey response for this linkId.
-          if (survey_response.hasOwnProperty(item['linkId']) && item.hasOwnProperty['type']) {
+          if (survey_response.hasOwnProperty(item['linkId']) && item.hasOwnProperty('type')) {
  	    switch (item['type']) {
  	      case 'decimal':
 		current_item['answer'] = [{'valueDecimal': survey_response[item['linkId']]}];
@@ -555,6 +555,7 @@ function pack_survey_response(questionnaire, survey_response, fhir_version) {
 		  if (survey_attachment.hasOwnProperty('content')) {
 		    // SurveyJS includes a prefix.
 		    // We should take everything after the comma.
+	            var comma_position = survey_attachment['content'].indexOf(',');
                     attachment['data'] = survey_attachment['content'].substring(comma_position + 1);
 		  }
 
@@ -587,7 +588,7 @@ function pack_survey_response(questionnaire, survey_response, fhir_version) {
         }
 
 	if (item.hasOwnProperty('item')) {
-          current_item['item'] = pack_survey_response(item['item'], survey_response, fhir_version);
+          current_item['item'] = pack_survey_response(item, survey_response, fhir_version);
 	}
 
 	items.push(current_item);
