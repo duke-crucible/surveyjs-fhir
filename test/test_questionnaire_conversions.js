@@ -42,7 +42,7 @@ describe('toFromQuestionnaireIdempotence', function() {
     var survey_from_fhir = converters.fromQuestionnaire(fhir_questionnaire, 'R4');
     assert.deepStrictEqual(
 	survey_json,
-	survey_from_fhir)
+	survey_from_fhir);
 
     done();
   });

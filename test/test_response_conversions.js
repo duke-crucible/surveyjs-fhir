@@ -37,7 +37,13 @@ describe('toFromQuestionnaireResponseIdempotence', function() {
     assert.ok(result_string.includes("Single Inputs Page"), result_string);
     assert.ok(result_string.includes("Other Selected!"), result_string);
 
-    // TODO:  Convert it back to SurveyJS and make sure it's the same.
+    // Convert it back to SurveyJS and make sure it's the same.
+    var survey_response_json = converters.fromQuestionnaireResponse(questionnaire_response, 'R4', {});
+
+    assert.deepStrictEqual(
+        survey_response_json,
+        test_data.sample_surveyjs_1_response,);
+
     done();
   });
 });

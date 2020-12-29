@@ -620,8 +620,117 @@ function to_questionnaire_response(questionnaire, survey_response, fhir_version)
   }
 }
 
+function unpack_survey_response(questionnaire_response, fhir_version, current_result) {
+  if (fhir_version == "R4") {
+    var new_result = current_result;
+
+    if (questionnaire_response.hasOwnProperty('item')) {
+      questionnaire_response['item'].forEach(function (item, item_index) {
+	if (item.hasOwnProperty('item')) {
+          new_result = unpack_survey_response(item, fhir_version, new_result);
+        }
+
+	// Even without the questionnaire, we can largely infer the format of the result.
+	// We will make a best-effort attempt to reconstitute it under the assumption that the
+	// answers match the prescription above.  This may not always be feasible and may eventually
+	// need the format of the base questionnaire.
+	if (item.hasOwnProperty('linkId') && item.hasOwnProperty('answer')) {
+	  if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueBoolean'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueBoolean'];
+ 	  }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueDecimal'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueDecimal'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueInteger'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueInteger'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueDate'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueDate'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueDateTime'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueDateTime'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueTime'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueTime'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueString'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueString'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueUri'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueUri'];
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueCoding'))) {
+	    if (item['answer'][0]['valueCoding'].hasOwnProperty('code')) {
+              new_result[item['linkId']] = item['answer'][0]['valueCoding']['code'];
+	    } else if (item['answer'][0]['valueCoding'].hasOwnProperty('display')) {
+              new_result[item['linkId']] = item['answer'][0]['valueCoding']['display'];
+	    }
+          }
+
+          if ((item['answer'].length == 1) && (item['answer'][0].hasOwnProperty('valueQuantity'))) {
+            if (item['answer'][0]['valueQuantity'].hasOwnProperty('value')) {
+              new_result[item['linkId']] = item['answer'][0]['valueQuantity']['value']; 
+              if (item['answer'][0]['valueQuantity'].hasOwnProperty('unit')) {
+                new_result[item['linkId']] += item['answer'][0]['valueQuantity']['unit'];
+              }
+            }
+          }
+
+	  // Special case:  One or more file attachments.
+          if ((item['answer'].length >= 1) && (item['answer'][0].hasOwnProperty('valueAttachment'))) {
+            new_result[item['linkId']] = [];
+            item['answer'].forEach(function (attachment, attachment_index) {
+	      if (attachment.hasOwnProperty('valueAttachment')) {
+                var current_attachment = {};
+
+		if (attachment['valueAttachment'].hasOwnProperty('title')) {
+	          current_attachment['name'] = attachment['valueAttachment']['title'];
+		}
+
+		if (attachment['valueAttachment'].hasOwnProperty('contentType')) {
+		  current_attachment['type'] = attachment['valueAttachment']['contentType'];
+
+		  if (attachment['valueAttachment'].hasOwnProperty('data')) {
+                    current_attachment['content'] = 'data:' + attachment['valueAttachment']['contentType'] + ';base64,' + attachment['valueAttachment']['data']; 
+		  } else {
+                    current_attachment['content'] = 'base64,' + attachment['valueAttachment']['data']; 
+		  }
+		}
+
+		new_result[item['linkId']].push(current_attachment);
+	      }
+	    });
+          }
+
+          // Special case:  Two strings.
+          if ((item['answer'].length == 2) && (item['answer'][0].hasOwnProperty('valueString')) && (item['answer'][1].hasOwnProperty('valueString'))) {
+            new_result[item['linkId']] = item['answer'][0]['valueString'];
+            new_result[item['linkId'] + '-Comment'] = item['answer'][1]['valueString'];
+          }
+	}
+      });
+    }
+    return new_result;
+  } else {
+    throw new Error("FHIR version not implemented: " + fhir_version);
+  }
+}
+
+
 function from_questionnaire_response(questionnaire_response, fhir_version) {
-  return "TODO!";
+  if (fhir_version == "R4") {
+    return unpack_survey_response(questionnaire_response, fhir_version, {})
+  } else {
+
+  }
 }
 
 module.exports = {
