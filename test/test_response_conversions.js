@@ -1,5 +1,5 @@
 const assert = require('assert');
-const converters = require('./../src/surveyjs-fhir.js');
+const converters = require('./../src/index.js');
 const Fhir = require('fhir').Fhir;
 const SurveyJS = require('survey-angular');
 const testData = require('./test_data.js');

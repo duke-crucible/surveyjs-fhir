@@ -2,7 +2,7 @@
   "name": "surveyjs-fhir",
   "version": "1.0.0",
   "description": "Tools for converting between FHIR JSON and Survey.JS JSON.",
-  "main": "src/surveyjs-fhir.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha"
   },
