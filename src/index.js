@@ -25,7 +25,7 @@ requireOneOf([
  * @return {json} JSON representing an equivalent FHIR Questionnaire.
  */
 function toQuestionnaire(survey, fhirVersion) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     const questionnaireJson = {
       'resourceType': 'Questionnaire',
       'status': 'unknown',
@@ -208,7 +208,7 @@ function toQuestionnaire(survey, fhirVersion) {
                           answerOption['valueCoding']['code'] = option['value'];
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            if (option['value'] == element['defaultValue']) {
+                            if (option['value'] === element['defaultValue']) {
                               answerOption['initialSelected'] = true;
                             }
                           }
@@ -294,7 +294,7 @@ function toQuestionnaire(survey, fhirVersion) {
  * @return {json} JSON representing an equivalent SurveyJS Questionnaire.
  */
 function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     let pages = [];
 
     if (questionnaire.hasOwnProperty('item')) {
@@ -375,7 +375,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
           switch (item['type']) {
             case 'decimal':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueDecimal')) {
                 element['defaultValue'] = item['initial'][0]['valueDecimal'];
               }
@@ -386,7 +386,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'date':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueDate')) {
                 element['defaultValue'] = item['initial'][0]['valueDate'];
               }
@@ -397,7 +397,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'dateTime':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueDateTime')) {
                 element['defaultValue'] = item['initial'][0]['valueDateTime'];
               }
@@ -408,7 +408,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'time':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueTime')) {
                 element['defaultValue'] = item['initial'][0]['valueTime'];
               }
@@ -419,7 +419,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'url':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueUri')) {
                 element['defaultValue'] = item['initial'][0]['valueUri'];
               }
@@ -430,7 +430,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'string':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueString')) {
                 element['defaultValue'] = item['initial'][0]['valueString'];
               }
@@ -440,7 +440,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'boolean':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueBoolean')) {
                 element['defaultValue'] = item['initial'][0]['valueBoolean'];
               }
@@ -450,7 +450,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               break;
             case 'text':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length == 1 &&
+                  item['initial'].length === 1 &&
                   item['initial'][0].hasOwnProperty('valueString')) {
                 element['defaultValue'] = item['initial'][0]['valueString'];
               }
@@ -586,7 +586,7 @@ function fromQuestionnaire(questionnaire, fhirVersion) {
  *     argument data.
  */
 function packSurveyResponse(questionnaire, surveyResponse, fhirVersion) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     // We will traverse the questionnaire's items, matching them to a survey
     // response as possible.
     const items = [];
@@ -723,7 +723,7 @@ function packSurveyResponse(questionnaire, surveyResponse, fhirVersion) {
  *     surveyResponse.
  */
 function toQuestionnaireResponse(questionnaire, surveyResponse, fhirVersion) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     // We will traverse the questionnaire's items,
     // matching them to a survey response as possible.
     const questionnaireResponseJson = {
@@ -760,7 +760,7 @@ function unpackSurveyResponse(
     questionnaireResponse,
     fhirVersion,
     currentResult) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     let newResult = currentResult;
 
     if (questionnaireResponse.hasOwnProperty('item')) {
@@ -775,47 +775,47 @@ function unpackSurveyResponse(
         // above.  This may not always be feasible and may eventually
         // need the format of the base questionnaire.
         if (item.hasOwnProperty('linkId') && item.hasOwnProperty('answer')) {
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueBoolean'))) {
             newResult[item['linkId']] = item['answer'][0]['valueBoolean'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueDecimal'))) {
             newResult[item['linkId']] = item['answer'][0]['valueDecimal'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueInteger'))) {
             newResult[item['linkId']] = item['answer'][0]['valueInteger'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueDate'))) {
             newResult[item['linkId']] = item['answer'][0]['valueDate'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueDateTime'))) {
             newResult[item['linkId']] = item['answer'][0]['valueDateTime'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueTime'))) {
             newResult[item['linkId']] = item['answer'][0]['valueTime'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueString'))) {
             newResult[item['linkId']] = item['answer'][0]['valueString'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueUri'))) {
             newResult[item['linkId']] = item['answer'][0]['valueUri'];
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueCoding'))) {
             if (item['answer'][0]['valueCoding'].hasOwnProperty('code')) {
               newResult[item['linkId']] = (
@@ -827,7 +827,7 @@ function unpackSurveyResponse(
             }
           }
 
-          if ((item['answer'].length == 1) &&
+          if ((item['answer'].length === 1) &&
               (item['answer'][0].hasOwnProperty('valueQuantity'))) {
             if (item['answer'][0]['valueQuantity'].hasOwnProperty('value')) {
               newResult[item['linkId']] = (
@@ -873,7 +873,7 @@ function unpackSurveyResponse(
           }
 
           // Special case:  Two strings.
-          if ((item['answer'].length == 2) &&
+          if ((item['answer'].length === 2) &&
               (item['answer'][0].hasOwnProperty('valueString')) &&
               (item['answer'][1].hasOwnProperty('valueString'))) {
             newResult[item['linkId']] = item['answer'][0]['valueString'];
@@ -899,7 +899,7 @@ function unpackSurveyResponse(
  * @return {json} The SurveyJS JSON equivalent of the questionnaireResponse
  */
 function fromQuestionnaireResponse(questionnaireResponse, fhirVersion) {
-  if (fhirVersion == 'R4') {
+  if (fhirVersion === 'R4') {
     return unpackSurveyResponse(questionnaireResponse, fhirVersion, {});
   } else {
 
