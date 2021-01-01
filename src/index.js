@@ -326,7 +326,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
       }
 
       const elements = [];
-      questionnaire['item'].forEach(function(item, itemIndex) {
+      questionnaire['item'].forEach((item, itemIndex) => {
         if (item.hasOwnProperty('item')) {
           // This is a group.  Unpack it using our current defaults.
           pages = pages.concat(unpackItemsRecursive(
@@ -764,7 +764,7 @@ function unpackSurveyResponse(
     let newResult = currentResult;
 
     if (questionnaireResponse.hasOwnProperty('item')) {
-      questionnaireResponse['item'].forEach(function(item, itemIndex) {
+      questionnaireResponse['item'].forEach((item, itemIndex) => {
         if (item.hasOwnProperty('item')) {
           newResult = unpackSurveyResponse(item, fhirVersion, newResult);
         }
@@ -843,7 +843,7 @@ function unpackSurveyResponse(
           if ((item['answer'].length >= 1) &&
               (item['answer'][0].hasOwnProperty('valueAttachment'))) {
             newResult[item['linkId']] = [];
-            item['answer'].forEach(function(attachment, attachmentIndex) {
+            item['answer'].forEach((attachment, attachmentIndex) => {
               if (attachment.hasOwnProperty('valueAttachment')) {
                 const currentAttachment = {};
 
