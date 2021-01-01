@@ -1,4 +1,4 @@
-const sample_surveyjs_1 = {
+const sampleSurveyjs1 = {
   'pages': [
     {
       'name': 'single-inputs-page',
@@ -42,7 +42,7 @@ const sample_surveyjs_1 = {
           'name': 'single-input-url',
           'title': 'Single Input URL',
           'defaultValue': 'http://www.github.com',
-       	            'inputType': 'url',
+          'inputType': 'url',
         },
       ],
       'title': 'Single Inputs Page',
@@ -121,7 +121,7 @@ const sample_surveyjs_1 = {
   ],
 };
 
-const sample_surveyjs_1_response = {
+const sampleSurveyjs1Response = {
   'single-input-text': 'abc',
   'single-input-date': '2003-01-02',
   'single-input-datetime': '01/02/03 04:05:06',
@@ -143,6 +143,6 @@ const sample_surveyjs_1_response = {
 };
 
 module.exports = {
-  sample_surveyjs_1: sample_surveyjs_1,
-  sample_surveyjs_1_response: sample_surveyjs_1_response,
+  sampleSurveyjs1: sampleSurveyjs1,
+  sampleSurveyjs1Response: sampleSurveyjs1Response,
 };
