@@ -32,8 +32,14 @@
     "require-one-of": "^1.0.15"
   },
   "devDependencies": {
+    "eslint": "^7.16.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-compat": "^3.9.0",
     "fhir": "^4.7.11",
     "mocha": "^8.2.1",
     "survey-angular": "^1.8.21"
-  }
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }

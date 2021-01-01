@@ -29,3 +29,10 @@ You can run unit tests with:
 ```
 npm test
 ```
+
+## Developing
+
+You can run our linter to check your style using:
+```
+npx eslint src/*.js test/*.js
+```
