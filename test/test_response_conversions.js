@@ -28,7 +28,7 @@ describe('toFromQuestionnaireResponseIdempotence', function() {
 
     assert.strictEqual(
         true,
-        validationResult['valid']);
+        validationResult.valid);
 
     // Convert the survey result into a FHIR questionnaire response.
     const questionnaireResponse = converters.toQuestionnaireResponse(

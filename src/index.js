@@ -44,94 +44,94 @@ function toQuestionnaire(survey, fhirVersion) {
     //        https://github.com/surveyjs/survey-library/blob/master/src/conditionsParser.ts
 
     if (survey.hasOwnProperty('pages')) {
-      survey['pages'].forEach((page, pageIndex) => {
+      survey.pages.forEach((page, pageIndex) => {
         if (page.hasOwnProperty('name')) {
           const childItems = [];
 
           if (page.hasOwnProperty('elements')) {
-            page['elements'].forEach((element, elementIndex) => {
+            page.elements.forEach((element, elementIndex) => {
               if (element.hasOwnProperty('name') &&
                   element.hasOwnProperty('type')) {
                 const childItem = {
-                  'linkId': element['name'],
+                  'linkId': element.name,
                 };
 
                 if (element.hasOwnProperty('title')) {
-                  childItem['text'] = element['title'];
+                  childItem.text = element.title;
                 }
 
                 if (element.hasOwnProperty('readOnly')) {
-                  childItem['readOnly'] = element['readOnly'];
+                  childItem.readOnly = element.readOnly;
                 }
 
                 if (element.hasOwnProperty('maxLength')) {
-                  childItem['maxLength'] = element['maxLength'];
+                  childItem.maxLength = element.maxLength;
                 }
 
                 if (element.hasOwnProperty('isRequired')) {
-                  childItem['required'] = element['isRequired'];
+                  childItem.required = element.isRequired;
                 }
 
                 if (element.hasOwnProperty('visibleIf')) {
                   console.warn(
                       'visibleIf is not yet supported: ' +
-                      element['name']);
+                      element.name);
                 }
 
-                switch (element['type']) {
+                switch (element.type) {
                   case 'text':
                     if (element.hasOwnProperty('inputType')) {
-                      switch (element['inputType']) {
+                      switch (element.inputType) {
                         case 'number':
-                          childItem['type'] = 'decimal';
+                          childItem.type = 'decimal';
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            childItem['initial'] = [{
-                              'valueDecimal': element['defaultValue'],
+                            childItem.initial = [{
+                              'valueDecimal': element.defaultValue,
                             }];
                           }
 
                           childItems.push(childItem);
                           break;
                         case 'date':
-                          childItem['type'] = 'date';
+                          childItem.type = 'date';
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            childItem['initial'] = [{
-                              'valueDate': element['defaultValue'],
+                            childItem.initial = [{
+                              'valueDate': element.defaultValue,
                             }];
                           }
 
                           childItems.push(childItem);
                           break;
                         case 'datetime':
-                          childItem['type'] = 'dateTime';
+                          childItem.type = 'dateTime';
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            childItem['initial'] = [{
-                              'valueDateTime': element['defaultValue'],
+                            childItem.initial = [{
+                              'valueDateTime': element.defaultValue,
                             }];
                           }
 
                           childItems.push(childItem);
                           break;
                         case 'time':
-                          childItem['type'] = 'time';
+                          childItem.type = 'time';
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            childItem['initial'] = [{
-                              'valueTime': element['defaultValue'],
+                            childItem.initial = [{
+                              'valueTime': element.defaultValue,
                             }];
                           }
 
                           childItems.push(childItem);
                           break;
                         case 'url':
-                          childItem['type'] = 'url';
+                          childItem.type = 'url';
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            childItem['initial'] = [{
-                              'valueUri': element['defaultValue'],
+                            childItem.initial = [{
+                              'valueUri': element.defaultValue,
                             }];
                           }
 
@@ -140,15 +140,15 @@ function toQuestionnaire(survey, fhirVersion) {
                         default:
                           console.warn(
                               'Skipping unsupported string input type: ' +
-                              element['inputType']);
+                              element.inputType);
                           break;
                       }
                     } else {
-                      childItem['type'] = 'string';
+                      childItem.type = 'string';
 
                       if (element.hasOwnProperty('defaultValue')) {
-                        childItem['initial'] = [{
-                          'valueString': element['defaultValue'],
+                        childItem.initial = [{
+                          'valueString': element.defaultValue,
                         }];
                       }
 
@@ -156,33 +156,33 @@ function toQuestionnaire(survey, fhirVersion) {
                     }
                     break;
                   case 'boolean':
-                    childItem['type'] = 'boolean';
+                    childItem.type = 'boolean';
 
                     if (element.hasOwnProperty('defaultValue')) {
-                      childItem['initial'] = [{
-                        'valueBoolean': element['defaultValue'],
+                      childItem.initial = [{
+                        'valueBoolean': element.defaultValue,
                       }];
                     }
 
                     childItems.push(childItem);
                     break;
                   case 'comment':
-                    childItem['type'] = 'text';
+                    childItem.type = 'text';
 
                     if (element.hasOwnProperty('defaultValue')) {
-                      childItem['initial'] = [{
-                        'valueString': element['defaultValue'],
+                      childItem.initial = [{
+                        'valueString': element.defaultValue,
                       }];
                     }
 
                     childItems.push(childItem);
                     break;
                   case 'url':
-                    childItem['type'] = 'url';
+                    childItem.type = 'url';
 
                     if (element.hasOwnProperty('defaultValue')) {
-                      childItem['initial'] = [{
-                        'valueUri': element['defaultValue'],
+                      childItem.initial = [{
+                        'valueUri': element.defaultValue,
                       }];
                     }
 
@@ -190,52 +190,52 @@ function toQuestionnaire(survey, fhirVersion) {
                     break;
                   case 'dropdown':
                     if (element.hasOwnProperty('hasOther') &&
-                        element['hasOther']) {
-                      childItem['type'] = 'open-choice';
+                        element.hasOther) {
+                      childItem.type = 'open-choice';
                     } else {
-                      childItem['type'] = 'choice';
+                      childItem.type = 'choice';
                     }
 
                     const answerOptions = [];
 
                     if (element.hasOwnProperty('choices')) {
-                      element['choices'].forEach((option, optionIndex) => {
+                      element.choices.forEach((option, optionIndex) => {
                         const answerOption = {
                           'valueCoding': {},
                         };
 
                         if (option.hasOwnProperty('value')) {
-                          answerOption['valueCoding']['code'] = option['value'];
+                          answerOption.valueCoding.code = option.value;
 
                           if (element.hasOwnProperty('defaultValue')) {
-                            if (option['value'] === element['defaultValue']) {
-                              answerOption['initialSelected'] = true;
+                            if (option.value === element.defaultValue) {
+                              answerOption.initialSelected = true;
                             }
                           }
                         }
 
                         if (option.hasOwnProperty('text')) {
-                          answerOption['valueCoding']['display'] = (
-                            option['text']);
+                          answerOption.valueCoding.display = (
+                            option.text);
                         }
 
                         answerOptions.push(answerOption);
                       });
                     }
 
-                    childItem['answerOption'] = answerOptions;
+                    childItem.answerOption = answerOptions;
 
                     childItems.push(childItem);
                     break;
                   case 'file':
-                    childItem['type'] = 'attachment';
+                    childItem.type = 'attachment';
 
                     childItems.push(childItem);
                     break;
                   default:
                     console.warn(
                         'Skipping unsupported survey element type: ' +
-                        element['type']);
+                        element.type);
                     break;
                 }
               } else {
@@ -248,16 +248,16 @@ function toQuestionnaire(survey, fhirVersion) {
 
           if (childItems.length > 0) {
             const itemGroup = {
-              'linkId': page['name'],
+              'linkId': page.name,
               'type': 'group',
               'item': childItems,
             };
 
             if (page.hasOwnProperty('title')) {
-              itemGroup['text'] = page['title'];
+              itemGroup.text = page.title;
             }
 
-            questionnaireJson['item'].push(itemGroup);
+            questionnaireJson.item.push(itemGroup);
           } else {
             console.warn(
                 'A page was found with no elements, so it could not be ' +
@@ -305,28 +305,28 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
 
       // Root questionnaire
       if (questionnaire.hasOwnProperty('title')) {
-        title = questionnaire['title'];
+        title = questionnaire.title;
       }
 
       // Child item-groups
       if (questionnaire.hasOwnProperty('text')) {
-        title = questionnaire['text'];
+        title = questionnaire.text;
       }
 
       if (title) {
-        page['title'] = title;
+        page.title = title;
       }
 
       if (questionnaire.hasOwnProperty('name')) {
-        page['name'] = questionnaire['name'];
+        page.name = questionnaire.name;
       }
 
       if (questionnaire.hasOwnProperty('linkId')) {
-        page['name'] = questionnaire['linkId'];
+        page.name = questionnaire.linkId;
       }
 
       const elements = [];
-      questionnaire['item'].forEach((item, itemIndex) => {
+      questionnaire.item.forEach((item, itemIndex) => {
         if (item.hasOwnProperty('item')) {
           // This is a group.  Unpack it using our current defaults.
           pages = pages.concat(unpackItemsRecursive(
@@ -338,182 +338,182 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
           // Get basic, universal information for this item.
           // Root questionnaire
           if (item.hasOwnProperty('name')) {
-            element['name'] = item['name'];
+            element.name = item.name;
           }
 
           // Child item-groups
           if (item.hasOwnProperty('linkId')) {
-            element['name'] = item['linkId'];
+            element.name = item.linkId;
           }
 
           // Root questionnarie
           if (item.hasOwnProperty('title')) {
-            element['title'] = item['title'];
+            element.title = item.title;
           }
 
           // Child item-groups
           if (item.hasOwnProperty('text')) {
-            element['title'] = item['text'];
+            element.title = item.text;
           }
 
           if (item.hasOwnProperty('required')) {
-            element['isRequired'] = item['required'];
+            element.isRequired = item.required;
           }
 
           if (item.hasOwnProperty('maxLength')) {
-            element['maxLength'] = item['maxLength'];
+            element.maxLength = item.maxLength;
           }
 
           if (item.hasOwnProperty('readOnly')) {
-            element['readOnly'] = item['readOnly'];
+            element.readOnly = item.readOnly;
           }
 
           // TODO:  Support FHIR enableWhen/enableBehavior.
           // Going from FHIR to SurveyJS in this case should be much easier
           // than from SurveyJS to FHIR.
 
-          switch (item['type']) {
+          switch (item.type) {
             case 'decimal':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueDecimal')) {
-                element['defaultValue'] = item['initial'][0]['valueDecimal'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueDecimal')) {
+                element.defaultValue = item.initial[0].valueDecimal;
               }
 
-              element['type'] = 'text';
-              element['inputType'] = 'number';
+              element.type = 'text';
+              element.inputType = 'number';
               elements.push(element);
               break;
             case 'date':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueDate')) {
-                element['defaultValue'] = item['initial'][0]['valueDate'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueDate')) {
+                element.defaultValue = item.initial[0].valueDate;
               }
 
-              element['type'] = 'text';
-              element['inputType'] = 'date';
+              element.type = 'text';
+              element.inputType = 'date';
               elements.push(element);
               break;
             case 'dateTime':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueDateTime')) {
-                element['defaultValue'] = item['initial'][0]['valueDateTime'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueDateTime')) {
+                element.defaultValue = item.initial[0].valueDateTime;
               }
 
-              element['type'] = 'text';
-              element['inputType'] = 'datetime';
+              element.type = 'text';
+              element.inputType = 'datetime';
               elements.push(element);
               break;
             case 'time':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueTime')) {
-                element['defaultValue'] = item['initial'][0]['valueTime'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueTime')) {
+                element.defaultValue = item.initial[0].valueTime;
               }
 
-              element['type'] = 'text';
-              element['inputType'] = 'time';
+              element.type = 'text';
+              element.inputType = 'time';
               elements.push(element);
               break;
             case 'url':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueUri')) {
-                element['defaultValue'] = item['initial'][0]['valueUri'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueUri')) {
+                element.defaultValue = item.initial[0].valueUri;
               }
 
-              element['type'] = 'text';
-              element['inputType'] = 'url';
+              element.type = 'text';
+              element.inputType = 'url';
               elements.push(element);
               break;
             case 'string':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueString')) {
-                element['defaultValue'] = item['initial'][0]['valueString'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueString')) {
+                element.defaultValue = item.initial[0].valueString;
               }
 
-              element['type'] = 'text';
+              element.type = 'text';
               elements.push(element);
               break;
             case 'boolean':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueBoolean')) {
-                element['defaultValue'] = item['initial'][0]['valueBoolean'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueBoolean')) {
+                element.defaultValue = item.initial[0].valueBoolean;
               }
 
-              element['type'] = 'boolean';
+              element.type = 'boolean';
               elements.push(element);
               break;
             case 'text':
               if (item.hasOwnProperty('initial') &&
-                  item['initial'].length === 1 &&
-                  item['initial'][0].hasOwnProperty('valueString')) {
-                element['defaultValue'] = item['initial'][0]['valueString'];
+                  item.initial.length === 1 &&
+                  item.initial[0].hasOwnProperty('valueString')) {
+                element.defaultValue = item.initial[0].valueString;
               }
 
-              element['type'] = 'comment';
+              element.type = 'comment';
               elements.push(element);
               break;
             case 'attachment':
-              element['type'] = 'file';
+              element.type = 'file';
               // Required, but no clear place to store this in FHIR.
-              element['maxSize'] = 0;
+              element.maxSize = 0;
               elements.push(element);
               break;
             case 'open-choice':
-              element['hasOther'] = true;
+              element.hasOther = true;
             case 'choice':
-              element['type'] = 'dropdown';
+              element.type = 'dropdown';
               let defaultValue = null;
               const choices = [];
 
               if (item.hasOwnProperty('answerOption')) {
-                item['answerOption'].forEach((option, optionIndex) => {
+                item.answerOption.forEach((option, optionIndex) => {
                   const choice = {};
 
                   if (option.hasOwnProperty('valueInteger')) {
-                    choice['value'] = String(option['valueInteger']);
-                    choice['text'] = String(option['valueInteger']);
+                    choice.value = String(option.valueInteger);
+                    choice.text = String(option.valueInteger);
                   }
 
                   if (option.hasOwnProperty('valueDate')) {
-                    choice['value'] = String(option['valueDate']);
-                    choice['text'] = String(option['valueDate']);
+                    choice.value = String(option.valueDate);
+                    choice.text = String(option.valueDate);
                   }
 
                   if (option.hasOwnProperty('valueTime')) {
-                    choice['value'] = String(option['valueTime']);
-                    choice['text'] = String(option['valueTime']);
+                    choice.value = String(option.valueTime);
+                    choice.text = String(option.valueTime);
                   }
 
                   if (option.hasOwnProperty('valueString')) {
-                    choice['value'] = String(option['valueString']);
-                    choice['text'] = String(option['valueString']);
+                    choice.value = String(option.valueString);
+                    choice.text = String(option.valueString);
                   }
 
                   if (option.hasOwnProperty('valueCoding')) {
-                    if (option['valueCoding'].hasOwnProperty('code')) {
-                      choice['value'] = option['valueCoding']['code'];
-                      choice['text'] = option['valueCoding']['code'];
+                    if (option.valueCoding.hasOwnProperty('code')) {
+                      choice.value = option.valueCoding.code;
+                      choice.text = option.valueCoding.code;
                     }
 
-                    if (option['valueCoding'].hasOwnProperty('display')) {
-                      choice['text'] = option['valueCoding']['display'];
+                    if (option.valueCoding.hasOwnProperty('display')) {
+                      choice.text = option.valueCoding.display;
 
                       if (!(choice.hasOwnProperty('value'))) {
-                        choice['value'] = option['valueCoding']['display'];
+                        choice.value = option.valueCoding.display;
                       }
                     }
                   }
 
                   if (choice.hasOwnProperty('value')) {
                     if (option.hasOwnProperty('initialSelected')) {
-                      if (option['initialSelected']) {
-                        defaultValue = choice['value'];
+                      if (option.initialSelected) {
+                        defaultValue = choice.value;
                       }
                     }
                     choices.push(choice);
@@ -523,17 +523,17 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
                   }
                 });
 
-                element['choices'] = choices;
+                element.choices = choices;
               }
 
               if (defaultValue) {
-                element['defaultValue'] = defaultValue;
+                element.defaultValue = defaultValue;
               }
               elements.push(element);
               break;
             default:
               console.warn('Skipping unsupported questionnaire item type: ' +
-                           item['type']);
+                           item.type);
               break;
           }
         }
@@ -541,7 +541,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
 
       // Decline to add empty pages.
       if (elements.length > 0) {
-        page['elements'] = elements;
+        page.elements = elements;
         pages.push(page);
       }
     }
@@ -594,110 +594,110 @@ function packSurveyResponse(questionnaire, surveyResponse, fhirVersion) {
     // The response item's structure largely mimics that of the questionnaire
     // itself.  Thus, we will copy it and add the answers whenever applicable.
     if (questionnaire.hasOwnProperty('item')) {
-      questionnaire['item'].forEach((item, itemIndex) => {
+      questionnaire.item.forEach((item, itemIndex) => {
         const currentItem = {};
 
         if (item.hasOwnProperty('linkId')) {
-          currentItem['linkId'] = item['linkId'];
+          currentItem.linkId = item.linkId;
 
           // Check the survey response for this linkId.
-          if (surveyResponse.hasOwnProperty(item['linkId']) &&
+          if (surveyResponse.hasOwnProperty(item.linkId) &&
               item.hasOwnProperty('type')) {
-            switch (item['type']) {
+            switch (item.type) {
               case 'decimal':
-                currentItem['answer'] = [
-                  {'valueDecimal': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueDecimal': surveyResponse[item.linkId]}];
                 break;
               case 'date':
-                currentItem['answer'] = [
-                  {'valueDate': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueDate': surveyResponse[item.linkId]}];
                 break;
               case 'dateTime':
-                currentItem['answer'] = [
-                  {'valueDateTime': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueDateTime': surveyResponse[item.linkId]}];
                 break;
               case 'time':
-                currentItem['answer'] = [
-                  {'valueTime': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueTime': surveyResponse[item.linkId]}];
                 break;
               case 'url':
-                currentItem['answer'] = [
-                  {'valueUri': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueUri': surveyResponse[item.linkId]}];
                 break;
               case 'string':
-                currentItem['answer'] = [
-                  {'valueString': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueString': surveyResponse[item.linkId]}];
                 break;
               case 'boolean':
-                currentItem['answer'] = [
-                  {'valueBoolean': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueBoolean': surveyResponse[item.linkId]}];
                 break;
               case 'text':
-                currentItem['answer'] = [
-                  {'valueString': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueString': surveyResponse[item.linkId]}];
                 break;
               case 'attachment':
-                currentItem['answer'] = [];
+                currentItem.answer = [];
 
-                surveyResponse[item['linkId']].forEach(
+                surveyResponse[item.linkId].forEach(
                     (surveyAttachment, surveyAttachmentIndex) => {
                       const attachment = {};
 
                       if (surveyAttachment.hasOwnProperty('type')) {
-                        attachment['contentType'] = surveyAttachment['type'];
+                        attachment.contentType = surveyAttachment.type;
                       }
 
                       if (surveyAttachment.hasOwnProperty('name')) {
-                        attachment['title'] = surveyAttachment['name'];
+                        attachment.title = surveyAttachment.name;
                       }
 
                       if (surveyAttachment.hasOwnProperty('content')) {
                         // SurveyJS includes a prefix.
                         // We should take everything after the comma.
                         const commaPosition = (
-                          surveyAttachment['content'].indexOf(','));
-                        attachment['data'] = (
-                          surveyAttachment['content'].substring(
+                          surveyAttachment.content.indexOf(','));
+                        attachment.data = (
+                          surveyAttachment.content.substring(
                               commaPosition + 1));
                       }
 
-                      currentItem['answer'].push(
+                      currentItem.answer.push(
                           {'valueAttachment': attachment});
                     });
                 break;
               case 'choice':
-                currentItem['answer'] = [
-                  {'valueString': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueString': surveyResponse[item.linkId]}];
                 break;
               case 'open-choice':
-                currentItem['answer'] = [
-                  {'valueString': surveyResponse[item['linkId']]}];
+                currentItem.answer = [
+                  {'valueString': surveyResponse[item.linkId]}];
 
                 if (surveyResponse
-                    .hasOwnProperty(item['linkId'] + '-Comment')) {
-                  currentItem['answer'].push(
+                    .hasOwnProperty(item.linkId + '-Comment')) {
+                  currentItem.answer.push(
                       {'valueString':
-                           surveyResponse[item['linkId'] + '-Comment']});
+                           surveyResponse[item.linkId + '-Comment']});
                 }
                 break;
               default:
                 console.warn('Skipping unsupported questionnaire item type: ' +
-                    item['type']);
+                    item.type);
                 break;
             }
           }
         }
 
         if (item.hasOwnProperty('definition')) {
-          currentItem['definition'] = item['definition'];
+          currentItem.definition = item.definition;
         }
 
         if (item.hasOwnProperty('text')) {
-          currentItem['text'] = item['text'];
+          currentItem.text = item.text;
         }
 
         if (item.hasOwnProperty('item')) {
-          currentItem['item'] = (
+          currentItem.item = (
             packSurveyResponse(item, surveyResponse, fhirVersion));
         }
 
@@ -733,7 +733,7 @@ function toQuestionnaireResponse(questionnaire, surveyResponse, fhirVersion) {
 
     // The response item's structure largely mimics that of the questionnaire
     // itself.  Thus, we will copy it and add the answers whenever applicable.
-    questionnaireResponseJson['item'] = packSurveyResponse(
+    questionnaireResponseJson.item = packSurveyResponse(
         questionnaire,
         surveyResponse,
         fhirVersion);
@@ -764,7 +764,7 @@ function unpackSurveyResponse(
     let newResult = currentResult;
 
     if (questionnaireResponse.hasOwnProperty('item')) {
-      questionnaireResponse['item'].forEach((item, itemIndex) => {
+      questionnaireResponse.item.forEach((item, itemIndex) => {
         if (item.hasOwnProperty('item')) {
           newResult = unpackSurveyResponse(item, fhirVersion, newResult);
         }
@@ -775,110 +775,110 @@ function unpackSurveyResponse(
         // above.  This may not always be feasible and may eventually
         // need the format of the base questionnaire.
         if (item.hasOwnProperty('linkId') && item.hasOwnProperty('answer')) {
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueBoolean'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueBoolean'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueBoolean'))) {
+            newResult[item.linkId] = item.answer[0].valueBoolean;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueDecimal'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueDecimal'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueDecimal'))) {
+            newResult[item.linkId] = item.answer[0].valueDecimal;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueInteger'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueInteger'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueInteger'))) {
+            newResult[item.linkId] = item.answer[0].valueInteger;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueDate'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueDate'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueDate'))) {
+            newResult[item.linkId] = item.answer[0].valueDate;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueDateTime'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueDateTime'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueDateTime'))) {
+            newResult[item.linkId] = item.answer[0].valueDateTime;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueTime'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueTime'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueTime'))) {
+            newResult[item.linkId] = item.answer[0].valueTime;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueString'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueString'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueString'))) {
+            newResult[item.linkId] = item.answer[0].valueString;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueUri'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueUri'];
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueUri'))) {
+            newResult[item.linkId] = item.answer[0].valueUri;
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueCoding'))) {
-            if (item['answer'][0]['valueCoding'].hasOwnProperty('code')) {
-              newResult[item['linkId']] = (
-                item['answer'][0]['valueCoding']['code']);
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueCoding'))) {
+            if (item.answer[0].valueCoding.hasOwnProperty('code')) {
+              newResult[item.linkId] = (
+                item.answer[0].valueCoding.code);
             } else if (
-              item['answer'][0]['valueCoding'].hasOwnProperty('display')) {
-              newResult[item['linkId']] = (
-                item['answer'][0]['valueCoding']['display']);
+              item.answer[0].valueCoding.hasOwnProperty('display')) {
+              newResult[item.linkId] = (
+                item.answer[0].valueCoding.display);
             }
           }
 
-          if ((item['answer'].length === 1) &&
-              (item['answer'][0].hasOwnProperty('valueQuantity'))) {
-            if (item['answer'][0]['valueQuantity'].hasOwnProperty('value')) {
-              newResult[item['linkId']] = (
-                item['answer'][0]['valueQuantity']['value']);
-              if (item['answer'][0]['valueQuantity'].hasOwnProperty('unit')) {
-                newResult[item['linkId']] += (
-                  item['answer'][0]['valueQuantity']['unit']);
+          if ((item.answer.length === 1) &&
+              (item.answer[0].hasOwnProperty('valueQuantity'))) {
+            if (item.answer[0].valueQuantity.hasOwnProperty('value')) {
+              newResult[item.linkId] = (
+                item.answer[0].valueQuantity.value);
+              if (item.answer[0].valueQuantity.hasOwnProperty('unit')) {
+                newResult[item.linkId] += (
+                  item.answer[0].valueQuantity.unit);
               }
             }
           }
 
           // Special case:  One or more file attachments.
-          if ((item['answer'].length >= 1) &&
-              (item['answer'][0].hasOwnProperty('valueAttachment'))) {
-            newResult[item['linkId']] = [];
-            item['answer'].forEach((attachment, attachmentIndex) => {
+          if ((item.answer.length >= 1) &&
+              (item.answer[0].hasOwnProperty('valueAttachment'))) {
+            newResult[item.linkId] = [];
+            item.answer.forEach((attachment, attachmentIndex) => {
               if (attachment.hasOwnProperty('valueAttachment')) {
                 const currentAttachment = {};
 
-                if (attachment['valueAttachment'].hasOwnProperty('title')) {
-                  currentAttachment['name'] = (
-                    attachment['valueAttachment']['title']);
+                if (attachment.valueAttachment.hasOwnProperty('title')) {
+                  currentAttachment.name = (
+                    attachment.valueAttachment.title);
                 }
 
-                if (attachment['valueAttachment']
+                if (attachment.valueAttachment
                     .hasOwnProperty('contentType')) {
-                  currentAttachment['type'] = (
-                    attachment['valueAttachment']['contentType']);
+                  currentAttachment.type = (
+                    attachment.valueAttachment.contentType);
 
-                  if (attachment['valueAttachment'].hasOwnProperty('data')) {
-                    currentAttachment['content'] = (
-                      'data:' + attachment['valueAttachment']['contentType'] +
-                      ';base64,' + attachment['valueAttachment']['data']);
+                  if (attachment.valueAttachment.hasOwnProperty('data')) {
+                    currentAttachment.content = (
+                      'data:' + attachment.valueAttachment.contentType +
+                      ';base64,' + attachment.valueAttachment.data);
                   } else {
-                    currentAttachment['content'] = (
-                      'base64,' + attachment['valueAttachment']['data']);
+                    currentAttachment.content = (
+                      'base64,' + attachment.valueAttachment.data);
                   }
                 }
 
-                newResult[item['linkId']].push(currentAttachment);
+                newResult[item.linkId].push(currentAttachment);
               }
             });
           }
 
           // Special case:  Two strings.
-          if ((item['answer'].length === 2) &&
-              (item['answer'][0].hasOwnProperty('valueString')) &&
-              (item['answer'][1].hasOwnProperty('valueString'))) {
-            newResult[item['linkId']] = item['answer'][0]['valueString'];
-            newResult[item['linkId'] + '-Comment'] = (
-              item['answer'][1]['valueString']);
+          if ((item.answer.length === 2) &&
+              (item.answer[0].hasOwnProperty('valueString')) &&
+              (item.answer[1].hasOwnProperty('valueString'))) {
+            newResult[item.linkId] = item.answer[0].valueString;
+            newResult[item.linkId + '-Comment'] = (
+              item.answer[1].valueString);
           }
         }
       });

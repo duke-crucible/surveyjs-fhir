@@ -28,7 +28,7 @@ describe('toFromQuestionnaireIdempotence', function() {
 
     assert.strictEqual(
         true,
-        validationResult['valid']);
+        validationResult.valid);
 
     // Check that some things in the survey FHIR translated over.
     // We avoid making a change-detector test by spot checking a few things.
