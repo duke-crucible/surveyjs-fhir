@@ -8,7 +8,8 @@
 
 // We need survey-library from SurveyJS, but it doesn't matter which
 // way we get it.
-const requireOneOf = require('require-one-of');
+import requireOneOf from 'require-one-of';
+
 requireOneOf([
   'survey-angular',
   'survey-jquery',
@@ -562,9 +563,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
  * @return {json} JSON representing an equivalent SurveyJS Questionnaire.
  */
 function fromQuestionnaire(questionnaire, fhirVersion) {
-  pages = [];
-
-  pages = unpackItemsRecursive(questionnaire, fhirVersion);
+  const pages = unpackItemsRecursive(questionnaire, fhirVersion);
 
   return {
     'pages': pages,
@@ -906,7 +905,7 @@ function fromQuestionnaireResponse(questionnaireResponse, fhirVersion) {
   }
 }
 
-module.exports = {
+export default {
   toQuestionnaire: toQuestionnaire,
   fromQuestionnaire: fromQuestionnaire,
   toQuestionnaireResponse: toQuestionnaireResponse,

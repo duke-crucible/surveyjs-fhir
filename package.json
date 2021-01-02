@@ -2,7 +2,7 @@
   "name": "surveyjs-fhir",
   "version": "1.0.0",
   "description": "Tools for converting between FHIR JSON and Survey.JS JSON.",
-  "main": "src/index.js",
+  "main": "src/index.mjs",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha"
   },
@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/duke-crucible/surveyjs-fhir#readme",
   "dependencies": {
+    "node": "^15.4.0",
     "require-one-of": "^1.0.15"
   },
   "devDependencies": {
@@ -41,5 +42,6 @@
   },
   "browserslist": [
     "defaults"
-  ]
+  ],
+  "type": "module"
 }

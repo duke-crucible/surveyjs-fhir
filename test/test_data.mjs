@@ -142,7 +142,7 @@ const sampleSurveyjs1Response = {
   'dropdown-with-other-Comment': 'Other Selected!',
 };
 
-module.exports = {
+export default {
   sampleSurveyjs1: sampleSurveyjs1,
   sampleSurveyjs1Response: sampleSurveyjs1Response,
 };

@@ -1,8 +1,8 @@
-const assert = require('assert');
-const converters = require('./../src/index.js');
-const Fhir = require('fhir').Fhir;
-const SurveyJS = require('survey-angular');
-const testData = require('./test_data.js');
+import assert from 'assert';
+import converters from './../src/index.mjs';
+import {Fhir} from 'fhir';
+import SurveyJS from 'survey-angular';
+import testData from './test_data.mjs';
 
 describe('toFromQuestionnaireResponseIdempotence', function() {
   it('Questionnaire response should be converted to and from SurveyJS ' +
