@@ -1,6 +1,6 @@
 {
   "name": "surveyjs-fhir",
-  "version": "1.0.0",
+  "version": "0.1",
   "description": "Tools for converting between FHIR JSON and Survey.JS JSON.",
   "main": "src/index.mjs",
   "scripts": {
