@@ -36,3 +36,12 @@ You can run our linter to check your style using:
 ```
 npx eslint src/*.js test/*.js
 ```
+
+## Releasing
+
+Releases are automatically run from the main branch.  
+In order to release a new version, simply update the version in package.json before pulling into main.
+The GitHub action will take care of the rest.
+
+TODO:  [TheGOTOGuy](https://www.github.com/TheGOTOGuy) currently controls the repository, and the token is attached to his GitHub account.
+We need to switch control of the repository to a duke-crucible user.

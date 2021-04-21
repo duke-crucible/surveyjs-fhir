@@ -1,4 +1,9 @@
-on: push
+name: Test and Also Publish If Version is Updated
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   publish:
@@ -10,3 +15,6 @@ jobs:
           node-version: 15
       - run: npm install
       - run: npm test
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
