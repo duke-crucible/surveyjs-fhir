@@ -74,9 +74,8 @@ function toQuestionnaire(survey, fhirVersion) {
                 }
 
                 if (element.hasOwnProperty('visibleIf')) {
-                  console.warn(
-                      'visibleIf is not yet supported: ' +
-                      element.name);
+                  throw new Error(
+                      'visibleIf is not yet supported: ' + element.name);
                 }
 
                 switch (element.type) {
@@ -139,8 +138,8 @@ function toQuestionnaire(survey, fhirVersion) {
                           childItems.push(childItem);
                           break;
                         default:
-                          console.warn(
-                              'Skipping unsupported string input type: ' +
+                          throw new Error(
+                              'Unsupported string input type: ' +
                               element.inputType);
                           break;
                       }
@@ -234,15 +233,13 @@ function toQuestionnaire(survey, fhirVersion) {
                     childItems.push(childItem);
                     break;
                   default:
-                    console.warn(
-                        'Skipping unsupported survey element type: ' +
-                        element.type);
+                    throw new Error(
+                        'Unsupported survey element type: ' + element.type);
                     break;
                 }
               } else {
-                console.warn(
-                    'Survey elements found missing a name or type.  ' +
-                    'These will be skipped.');
+                throw new Error(
+                    'Survey elements found missing a name or type.');
               }
             });
           }
@@ -260,14 +257,10 @@ function toQuestionnaire(survey, fhirVersion) {
 
             questionnaireJson.item.push(itemGroup);
           } else {
-            console.warn(
-                'A page was found with no elements, so it could not be ' +
-                'included in our FHIR questionnaire.');
+            throw new Error('A page was found with no elements.');
           }
         } else {
-          console.warn(
-              'Survey page had no name, so it could not be included in our ' +
-              'FHIR questionnaire.');
+          throw new Error('A survey page had no name.');
         }
       });
     } else {
@@ -519,7 +512,7 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
                     }
                     choices.push(choice);
                   } else {
-                    console.warn(
+                    throw new Error(
                         'Questionnaire dropdowns had invalid options.');
                   }
                 });
@@ -533,8 +526,8 @@ function unpackItemsRecursive(questionnaire, fhirVersion, defaultTitle=null) {
               elements.push(element);
               break;
             default:
-              console.warn('Skipping unsupported questionnaire item type: ' +
-                           item.type);
+              throw new Error(
+                  'Unsupported questionnaire item type: ' + item.type);
               break;
           }
         }
@@ -680,8 +673,8 @@ function packSurveyResponse(questionnaire, surveyResponse, fhirVersion) {
                 }
                 break;
               default:
-                console.warn('Skipping unsupported questionnaire item type: ' +
-                    item.type);
+                throw new Error(
+                    'Unsupported questionnaire item type: ' + item.type);
                 break;
             }
           }

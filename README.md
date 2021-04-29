@@ -34,7 +34,7 @@ npm test
 
 You can run our linter to check your style using:
 ```
-npx eslint src/*.js test/*.js
+npx eslint src/*.mjs test/*.mjs
 ```
 
 ## Releasing
